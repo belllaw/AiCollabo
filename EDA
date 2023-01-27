@@ -1,6 +1,7 @@
 # EDA
 # hi 되는 거 아닌가염
 
+# 라이브러리 import
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -14,7 +15,33 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_curve, roc_auc_score
 
+# 데이터 불러오기
 df = arff.loadarff("/FordA_TRAIN.arff")
 df2 = arff.loadarff("/FordA_TEST.arff")
 train = pd.DataFrame(df[0])
 test = pd.DataFrame(df2[0])
+
+# 'target' 값 변경
+train.loc[train['target'] == b'-1', 'target'] = 0
+train.loc[train['target'] == b'1', 'target'] = 1
+test.loc[test['target'] == b'-1', 'target'] = 0
+test.loc[test['target'] == b'1', 'target'] = 1
+
+########### 모델링 ################
+train = train.apply(pd.to_numeric, errors='coerce')
+test = test.apply(pd.to_numeric, errors='coerce')
+
+# 스플릿
+X_train = train.iloc[:,0:500]
+X_test = test.iloc[:,0:500]
+Y_train = train.iloc[:,-1]
+Y_test = test.iloc[:,-1]
+
+knn = KNeighborsClassifier(n_neighbors = 5)
+knn.fit(X_train, Y_train)
+y_pred = knn.predict(X_test)
+
+print("prediction accuracy: {:.2f}".format(np.mean(y_pred == Y_test)))
+print("Test set Accuracy : ", metrics.accuracy_score(Y_test, y_pred))
+print("Test set predictions: {}".format(knn.predict(X_test)))
+
