@@ -1,3 +1,20 @@
 # EDA
 # hi 되는 거 아닌가염
 
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.io import arff
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+from sklearn.metrics import roc_curve
+from sklearn.metrics import f1_score
+from sklearn.metrics import roc_curve, roc_auc_score
+
+df = arff.loadarff("/FordA_TRAIN.arff")
+df2 = arff.loadarff("/FordA_TEST.arff")
+train = pd.DataFrame(df[0])
+test = pd.DataFrame(df2[0])
